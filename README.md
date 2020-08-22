@@ -1,2 +1,2 @@
-# quepence
+# AdPence
  Make Ads Pay
