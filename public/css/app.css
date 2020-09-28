@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Aetherfox';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Aetherfox'), url('../fonts/aetherfox.woff') format('woff');
+}
+
+.aether-font {
+    font-family: 'aetherfox', cursive;
+}
+
+.secular-one {
+    font-family: 'Secular One', sans-serif;
+}
+
+body {
+    background-image: linear-gradient(to right, #008bab, #1fc5c0) !important;
+}
+
+.font-size-64 {
+    font-size: 64px;
+}
+
+.popover-body, .tooltip {
+    font-family: 'Secular One', sans-serif;
+}
