@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('child');
 });
+
+Route::get('login/{driver}', [LoginController::class, 'redirectToProvider'])->name('login');
+Route::get('login/{driver}/callback', [LoginController::class, 'handleProviderCallback']);
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
