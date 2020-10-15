@@ -21,7 +21,16 @@
             >{{ auth()->user()->name }}</a>
         @endif
 
-        <div id="d-balance" class="text-white ml-auto" role="button" title="Withdraw Credits">
+        <div
+            id="d-balance"
+            class="text-white ml-auto"
+            role="button"
+            tabindex="0"
+            data-toggle="popover"
+            data-trigger="focus"
+            data-placement="bottom"
+            data-content="Click again to withdraw credits"
+        >
             @include('partials.logo')
             <span id="sp-balance">{{ $balance }}</span>
         </div>
@@ -49,7 +58,7 @@
         <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
     @else
         <script>
-            let $username = document.getElementById('p-username')
+            let $username = document.getElementById('p-username');
 
             new bootstrap.Popover($username);
 
@@ -67,6 +76,8 @@
         let $balance = document.getElementById('sp-balance'),
             $balanceWrapper = document.getElementById('d-balance');
 
+        new bootstrap.Popover($balanceWrapper);
+
         Livewire.on('balance-increment', balance => {
             $balance.innerText = balance;
             wobble($balanceWrapper);
@@ -76,7 +87,8 @@
 
 @push('styles')
     <style>
-        #p-username:focus {
+        #p-username:focus,
+        #d-balance:focus {
             outline: none;
             box-shadow: none;
         }
