@@ -29,6 +29,8 @@
 <body class="secular-one">
 @yield('content')
 
+<script src="{{ asset('js/app.js') }}"></script>
+
 @livewireScripts
 @stack('body-scripts')
 </body>
