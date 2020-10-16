@@ -25,17 +25,19 @@
             id="d-balance"
             class="text-white ml-auto"
             role="button"
-            tabindex="0"
-            data-toggle="popover"
-            data-trigger="focus"
-            data-placement="bottom"
-            data-content="Click again to withdraw credits"
+            data-toggle="modal"
+            data-target="#modal--withdraw"
         >
             @include('partials.logo')
             <span id="sp-balance">{{ $balance }}</span>
         </div>
     </div>
 </div>
+
+<x-modal id="modal--withdraw">
+    <x-slot name="title">Withdraw Token</x-slot>
+    @livewire('withdraw-token-input')
+</x-modal>
 
 @if(auth()->guest())
     <x-modal id="modal--login">
@@ -60,8 +62,6 @@
         <script>
             let $username = document.getElementById('p-username');
 
-            new bootstrap.Popover($username);
-
             $username.addEventListener('shown.bs.popover', function () {
                 this.href = this.dataset.href;
             });
@@ -76,21 +76,25 @@
         let $balance = document.getElementById('sp-balance'),
             $balanceWrapper = document.getElementById('d-balance');
 
-        new bootstrap.Popover($balanceWrapper);
-
         Livewire.on('balance-increment', balance => {
             $balance.innerText = balance;
             wobble($balanceWrapper);
-        })
+        });
     </script>
 @endpush
 
 @push('styles')
     <style>
-        #p-username:focus,
-        #d-balance:focus {
+        #p-username:focus {
             outline: none;
             box-shadow: none;
+        }
+        #withdraw-token--loader {
+            width: 52px;
+            position: absolute;
+            bottom: -81px;
+            z-index: 10;
+            left: 187px;
         }
     </style>
 @endpush
