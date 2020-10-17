@@ -21,23 +21,9 @@
             >{{ auth()->user()->name }}</a>
         @endif
 
-        <div
-            id="d-balance"
-            class="text-white ml-auto"
-            role="button"
-            data-toggle="modal"
-            data-target="#modal--withdraw"
-        >
-            @include('partials.logo')
-            <span id="sp-balance">{{ $balance }}</span>
-        </div>
+        @livewire('balance')
     </div>
 </div>
-
-<x-modal id="modal--withdraw">
-    <x-slot name="title">Withdraw Token</x-slot>
-    @livewire('withdraw-token-input')
-</x-modal>
 
 @if(auth()->guest())
     <x-modal id="modal--login">
@@ -71,16 +57,6 @@
             });
         </script>
     @endif
-
-    <script>
-        let $balance = document.getElementById('sp-balance'),
-            $balanceWrapper = document.getElementById('d-balance');
-
-        Livewire.on('balance-increment', balance => {
-            $balance.innerText = balance;
-            wobble($balanceWrapper);
-        });
-    </script>
 @endpush
 
 @push('styles')
@@ -88,13 +64,6 @@
         #p-username:focus {
             outline: none;
             box-shadow: none;
-        }
-        #withdraw-token--loader {
-            width: 52px;
-            position: absolute;
-            bottom: -81px;
-            z-index: 10;
-            left: 187px;
         }
     </style>
 @endpush
