@@ -49,6 +49,8 @@
                 class="input-group-prepend input-group-text"
                 role="button">Copy</span>
         </div>
+
+        <p class="font-normal mb-0 mt-3 h6">Hurry! Expires in 5 minutes.</p>
     </x-modal>
 </div>
 
