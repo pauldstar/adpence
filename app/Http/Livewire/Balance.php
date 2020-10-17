@@ -31,7 +31,7 @@ class Balance extends Component
 
     public function setToken(): void
     {
-        $this->withdrawToken = Str::uuid();
+        $this->withdrawToken = Str::uuid() . '-' . Str::random(6);
 
         if (Auth::guest()) {
             // todo: add withdraw tokens for guests
