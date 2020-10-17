@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Balance extends Component
 {
-    public $balance;
+    public int $balance;
 
     public string $withdrawToken = '';
 
@@ -34,6 +34,7 @@ class Balance extends Component
         $this->withdrawToken = Str::uuid();
 
         if (Auth::guest()) {
+            // todo: add withdraw tokens for guests
         } else Auth::user()->update(['withdraw_token' => $this->withdrawToken]);
     }
 
