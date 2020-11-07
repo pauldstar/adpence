@@ -29,7 +29,7 @@ class Balance extends Component
         $this->emit('increment-balance');
     }
 
-    public function setToken(): void
+    public function getCreditToken(): void
     {
         $this->withdrawToken = Str::uuid() . '-' . Str::random(6);
 

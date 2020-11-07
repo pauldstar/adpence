@@ -1,6 +1,6 @@
 <div class="ml-auto">
     <div
-        wire:click="setToken"
+        wire:click="getCreditToken"
         id="d-balance"
         data-toggle="modal"
         data-target="#modal--withdraw"
@@ -12,7 +12,7 @@
     </div>
 
     <x-modal id="modal--withdraw" wire:ignore>
-        <x-slot name="title">Withdraw Token</x-slot>
+        <x-slot name="title">Credit Token</x-slot>
 
         <div class="input-group position-relative">
             <svg
