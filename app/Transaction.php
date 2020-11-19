@@ -11,7 +11,7 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'token', 'amount'];
+    protected $fillable = ['user_id', 'uuid', 'amount'];
 
     public function user()
     {
@@ -20,24 +20,24 @@ class Transaction extends Model
 
     public function getCreditTokenAttribute()
     {
-        return $this->token . '-' .  base64_encode($this->id);
+        return $this->uuid . '-' .  base64_encode($this->id);
     }
 
-    public static function createCreditToken(string $token = null, int $amount = null): string
+    public static function createCreditToken(string $uuid = null, int $amount = null): string
     {
         return self::query()->create([
             'user_id' => Auth::id(),
-            'token' => $token ?? Str::uuid(),
+            'uuid' => $uuid ?? Str::uuid(),
             'amount' => $amount
         ])->creditToken;
     }
 
-    public static function findOrCreateCreditToken(string $token): string
+    public static function findOrCreateCreditToken(string $uuid): string
     {
-        $transaction = Transaction::firstWhere('token', $token);
+        $transaction = Transaction::firstWhere('uuid', $uuid);
 
         return $transaction
             ? $transaction->creditToken
-            : Transaction::createCreditToken($token, 0);
+            : Transaction::createCreditToken($uuid, 0);
     }
 }

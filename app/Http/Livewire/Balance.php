@@ -11,7 +11,7 @@ class Balance extends Component
 {
     public int $balance;
     public string $creditToken;
-    public ?string $sessionToken = null;
+    public ?string $sessionUuid = null;
 
     protected $listeners = ['payment-received' => 'incrementBalance'];
 
@@ -23,6 +23,7 @@ class Balance extends Component
 
     public function hydrate()
     {
+        $this->setSessionUuid();
         $this->setBalance();
     }
 
@@ -31,7 +32,7 @@ class Balance extends Component
         $this->balance += $value;
 
         if (Auth::guest()) {
-            Transaction::where('token', $this->sessionToken)->update([
+            Transaction::whereUuid($this->sessionUuid)->update([
                 'amount' => $this->balance
             ]);
         } else Auth::user()->update(['balance' => $this->balance]);
@@ -43,7 +44,7 @@ class Balance extends Component
     {
         if (Auth::guest()) {
             $this->creditToken = Transaction::findOrCreateCreditToken(
-                $this->sessionToken
+                $this->sessionUuid
             );
         } else $this->creditToken = Auth::user()->creditToken;
     }
@@ -51,19 +52,20 @@ class Balance extends Component
     private function setBalance()
     {
         if (Auth::guest()) {
-            $this->balance = session()->has('sessionToken')
-                ? Transaction::firstWhere('token', $this->sessionToken)->amount : 0;
+            $this->balance =
+                Transaction::firstWhere('uuid', $this->sessionUuid)->amount;
         } else $this->balance = Auth::user()->balance;
     }
 
-    private function setSessionToken()
+    private function setSessionUuid()
     {
         if (Auth::guest()) {
             $this->sessionToken = session('sessionToken', fn() => Str::uuid());
 
-            if (! session()->has('sessionToken')) {
-                session(['sessionToken' =>$this->sessionToken]);
-                Transaction::create(['token' => $this->sessionToken]);
+                if (! session()->has('sessionUuid')) {
+                    session(['sessionUuid' => $this->sessionUuid]);
+                    Transaction::create(['uuid' => $this->sessionUuid]);
+                }
             }
         }
     }

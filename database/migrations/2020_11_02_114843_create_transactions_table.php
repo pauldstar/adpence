@@ -15,8 +15,8 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->uuid('token')->unique();
             $table->unsignedInteger('amount')->default(0);
             $table->timestamps();
         });
