@@ -17,8 +17,7 @@ class Balance extends Component
 
     public function mount()
     {
-        $this->setBalance();
-        $this->setSessionToken();
+        $this->hydrate();
     }
 
     public function hydrate()
@@ -60,7 +59,10 @@ class Balance extends Component
     private function setSessionUuid()
     {
         if (Auth::guest()) {
-            $this->sessionToken = session('sessionToken', fn() => Str::uuid());
+            if ($this->sessionUuid) {
+                session(['sessionUuid' =>$this->sessionUuid]);
+            } else {
+                $this->sessionUuid = session('sessionUuid', fn() => Str::uuid());
 
                 if (! session()->has('sessionUuid')) {
                     session(['sessionUuid' => $this->sessionUuid]);
