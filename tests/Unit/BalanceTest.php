@@ -3,22 +3,14 @@
 namespace Tests\Unit;
 
 use App\Http\Livewire\Balance;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Transaction;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class BalanceTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * @dataProvider balanceProvider
-     * @param int $val
-     */
-    public function testIncrementGuestBalanceAfterSessionExpires(int $val): void
-    {
-    }
+    use DatabaseTransactions;
 
     /**
      * @dataProvider balanceProvider
@@ -29,6 +21,11 @@ class BalanceTest extends TestCase
         $balanceComp = Livewire::test(Balance::class);
         $balanceComp->call('incrementBalance', $val)->assertSet('balance', $val);
         $balanceComp->call('incrementBalance', $val)->assertSet('balance', $val * 2);
+
+        $this->assertTrue(Transaction::where([
+            'uuid' => session('sessionUuid'),
+            'amount' => $val * 2
+        ])->exists());
     }
 
     public function testGuestBalanceIsZeroOnMount(): void
