@@ -1,17 +1,21 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Http\Livewire\Balance;
 use App\Transaction;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 use Livewire\Testing\TestableLivewire;
+use Tests\MockSocialite;
 use Tests\TestCase;
 
 class SessionUuidTest extends TestCase
 {
     use DatabaseTransactions;
+    use MockSocialite;
 
     private TestableLivewire $component;
     private string $sessionUuid;
@@ -27,6 +31,7 @@ class SessionUuidTest extends TestCase
         $this->freshSession();
         $this->expiredServerUuid();
         $this->refreshedClientUuid();
+        $this->uuidDeletedAfterLogin();
     }
 
     /**
@@ -34,10 +39,14 @@ class SessionUuidTest extends TestCase
      */
     private function freshSession()
     {
+        $this->component->assertSet('sessionUuid', null);
+        $this->assertFalse(Session::has('sessionUuid'));
+
+        $this->component->call('incrementBalance', 1);
         $this->component->assertNotSet('sessionUuid', null);
 
-        $this->assertTrue(session()->has('sessionUuid'));
-        $this->sessionUuid = session('sessionUuid');
+        $this->assertTrue(Session::has('sessionUuid'));
+        $this->sessionUuid = Session::get('sessionUuid');
 
         $this->assertTrue(Transaction::whereUuid($this->sessionUuid)->exists());
     }
@@ -49,10 +58,13 @@ class SessionUuidTest extends TestCase
     {
         $this->flushSession();
 
-        $this->assertEmpty(session('sessionUuid'));
-        $this->component->set('balance', 1)->assertSet('sessionUuid', $this->sessionUuid);
+        $this->assertEmpty(Session::get('sessionUuid'));
 
-        $this->assertEquals($this->sessionUuid, session('sessionUuid'));
+        $this->component
+            ->call('incrementBalance', 1)
+            ->assertSet('sessionUuid', $this->sessionUuid);
+
+        $this->assertEquals($this->sessionUuid, Session::get('sessionUuid'));
     }
 
     /**
@@ -64,6 +76,14 @@ class SessionUuidTest extends TestCase
             ->call('incrementBalance', 25)
             ->assertSet('sessionUuid', $this->sessionUuid);
 
-        $this->assertEquals($this->sessionUuid, session('sessionUuid'));
+        $this->assertEquals($this->sessionUuid, Session::get('sessionUuid'));
+    }
+
+    private function uuidDeletedAfterLogin()
+    {
+        $this->mockSocialiteFacade(User::factory()->create());
+        $this->get('login/facebook/callback');
+        $this->assertFalse(Session::has('sessionUuid'));
+        $this->assertTrue(Transaction::whereUuid($this->sessionUuid)->exists());
     }
 }
