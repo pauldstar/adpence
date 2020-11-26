@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Transaction;
 use App\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -31,18 +33,25 @@ class LoginController extends Controller
         $socialite = Socialite::driver($request->route('driver'))->user();
 
         $user = User::query()->where('email', $socialite->email)->firstOrCreate([
-            'email' => $socialite->getEmail(),
-            'name' => $socialite->getName(),
+            'email' => $socialite->email,
+            'name' => $socialite->name,
         ]);
 
-        if (session('balance')) {
-            $user->increment('balance', session('balance'));
-            session(['balance' => 0]);
-        }
+        $this->transferGuestSessionBalanceToAccount($user);
 
         Auth::login($user);
 
         return redirect('/');
+    }
+
+    private function transferGuestSessionBalanceToAccount(Model $user)
+    {
+        if (session()->has('sessionUuid')) {
+            $trans = Transaction::select('amount')
+                ->firstWhere('uuid', Session::pull('sessionUuid'));
+            $user->increment('balance', $trans->amount);
+            $trans->delete();
+        }
     }
 
     public function logout(): RedirectResponse
