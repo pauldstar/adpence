@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -17,20 +18,23 @@ class Balance extends Component
 
     public function mount()
     {
-        $this->hydrate();
+        $this->setBalance();
     }
 
     public function hydrate()
     {
-        $this->setSessionUuid();
         $this->setBalance();
     }
 
     public function incrementBalance(int $value): void
     {
+        if ($value <= 0) return;
+
         $this->balance += $value;
 
         if (Auth::guest()) {
+            $this->setSessionUuid();
+
             Transaction::whereUuid($this->sessionUuid)->update([
                 'amount' => $this->balance
             ]);
@@ -42,32 +46,35 @@ class Balance extends Component
     public function getCreditToken(): void
     {
         if (Auth::guest()) {
-            $this->creditToken = Transaction::findOrCreateCreditToken(
-                $this->sessionUuid
-            );
+            if ($uuid = $this->getSessionUuid()) {
+                $this->creditToken = Transaction::findOrCreateCreditToken($uuid);
+            } else Session::flash('uuidError', 'Play some ads first');
         } else $this->creditToken = Auth::user()->creditToken;
     }
 
     private function setBalance()
     {
         if (Auth::guest()) {
-            $this->balance =
-                Transaction::firstWhere('uuid', $this->sessionUuid)->amount;
+            $uuid = $this->getSessionUuid();
+            $this->balance = $uuid ? Transaction::firstWhere('uuid', $uuid)->amount : 0;
         } else $this->balance = Auth::user()->balance;
+    }
+
+    private function getSessionUuid(bool $mostRecent = false)
+    {
+        return Session::get('sessionUuid', $this->sessionUuid);
     }
 
     private function setSessionUuid()
     {
-        if (Auth::guest()) {
-            if ($this->sessionUuid) {
-                session(['sessionUuid' =>$this->sessionUuid]);
-            } else {
-                $this->sessionUuid = session('sessionUuid', fn() => Str::uuid());
+        if ($this->sessionUuid) {
+            Session::put('sessionUuid', $this->sessionUuid);
+        } else {
+            $this->sessionUuid = Session::get('sessionUuid', fn() => Str::uuid());
 
-                if (! session()->has('sessionUuid')) {
-                    session(['sessionUuid' => $this->sessionUuid]);
-                    Transaction::create(['uuid' => $this->sessionUuid]);
-                }
+            if (! Session::has('sessionUuid')) {
+                Session::put('sessionUuid', $this->sessionUuid);
+                Transaction::create(['uuid' => $this->sessionUuid]);
             }
         }
     }
