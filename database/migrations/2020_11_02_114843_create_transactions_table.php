@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->unsignedInteger('amount')->default(0);
+            $table->unsignedInteger('amount')->nullable();
             $table->timestamps();
         });
     }
