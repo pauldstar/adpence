@@ -68,6 +68,7 @@
             $tokenInput.setSelectionRange(0, 99999); /*For mobile devices*/
             document.execCommand('copy');
             $copyToken.innerHTML = 'Copied!';
+            setTimeout(_ => $copyToken.innerHTML = 'Copy', 500);
         });
     </script>
 @endpush
