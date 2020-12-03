@@ -16,7 +16,7 @@
 
         <div class="input-group position-relative">
             <svg
-                wire:target="setToken" wire:loading
+                wire:target="getCreditToken" wire:loading
                 id="withdraw-token--loader" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 enable-background="new 0 0 0 0" xml:space="preserve">
@@ -35,9 +35,9 @@
             </svg>
 
             <input
-                wire:model="withdrawToken"
+                wire:model="creditToken"
                 wire:loading.class="text-hide"
-                wire:target="setToken"
+                wire:target="getCreditToken"
                 id="withdraw-token--input"
                 type="text"
                 class="form-control text-center"
