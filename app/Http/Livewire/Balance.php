@@ -48,7 +48,7 @@ class Balance extends Component
         if (Auth::guest()) {
             if ($uuid = $this->getSessionUuid()) {
                 $this->creditToken = Transaction::findOrCreateCreditToken($uuid);
-            } else Session::flash('uuidError', 'Play some ads first');
+            } else $this->creditToken = 'No credit, no token';
         } else $this->creditToken = Auth::user()->creditToken;
     }
 
