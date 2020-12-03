@@ -19,18 +19,16 @@
                 wire:target="getCreditToken" wire:loading
                 id="withdraw-token--loader" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                enable-background="new 0 0 0 0" xml:space="preserve">
+                enable-background="new 0 0 0 0" xml:space="preserve"
+            >
                 <circle fill="#424242" stroke="none" cx="6" cy="50" r="6">
-                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite"
-                             begin="0.1"></animate>
+                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1"></animate>
                 </circle>
                 <circle fill="#424242" stroke="none" cx="26" cy="50" r="6">
-                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite"
-                             begin="0.2"></animate>
+                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2"></animate>
                 </circle>
                 <circle fill="#424242" stroke="none" cx="46" cy="50" r="6">
-                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite"
-                             begin="0.3"></animate>
+                    <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3"></animate>
                 </circle>
             </svg>
 
@@ -47,10 +45,9 @@
             <span
                 id="withdraw-token--copy"
                 class="input-group-prepend input-group-text"
-                role="button">Copy</span>
+                role="button"
+            >Copy</span>
         </div>
-
-        <p class="font-normal mb-0 mt-3 h6">Hurry! Expires in 5 minutes.</p>
     </x-modal>
 </div>
 
