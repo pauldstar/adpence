@@ -38,9 +38,9 @@ class Transaction extends Model
     {
         $transaction = Transaction::firstWhere('uuid', $uuid);
 
-        return $transaction
-            ? $transaction->creditToken
-            : Transaction::createCreditToken($uuid, 0);
+        return optional($transaction)->creditToken
+            ?? Transaction::createCreditToken($uuid, 0);
+    }
 
     public function getActiveAttribute(): bool
     {
