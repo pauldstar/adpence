@@ -41,5 +41,20 @@ class Transaction extends Model
         return $transaction
             ? $transaction->creditToken
             : Transaction::createCreditToken($uuid, 0);
+
+    public function getActiveAttribute(): bool
+    {
+        if ($this->user_id) {
+            return $this->amount === null;
+        }
+
+        return true;
+    }
+
+    public function getInactiveAttribute(): bool
+    {
+        return !$this->active;
+    }
+
     }
 }
