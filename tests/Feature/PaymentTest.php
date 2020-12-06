@@ -33,7 +33,7 @@ class PaymentTest extends TestCase
 
         $response->assertStatus($status);
 
-        $user = $user->fresh();
+        $user = $user->refresh();
         $transaction = Transaction::firstWhere('uuid', $token);
 
         if ($status === 200) {
