@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -45,10 +46,24 @@ class User extends Authenticatable
 
     public function getCreditTokenAttribute()
     {
-        $ongoingTransaction = $this->transactions()->firstWhere('amount', null);
+        return optional($this->activeTransaction())->uuid
+            ?? Transaction::createCreditToken();
+    }
 
-        return $ongoingTransaction
-            ? $ongoingTransaction->creditToken
-            : Transaction::createCreditToken();
+    public function fulfill(int $amount): bool
+    {
+        if ($this->balance >= $amount) {
+            $fulfilled = false;
+
+            DB::transaction(function() use ($amount, &$fulfilled) {
+                $this->balance -= $amount;
+                $fulfilled = $this->save()
+                    && $this->activeTransaction()->update(['amount' => $amount]);
+            });
+
+            return $fulfilled;
+        }
+
+        return false;
     }
 }

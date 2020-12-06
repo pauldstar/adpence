@@ -56,5 +56,17 @@ class Transaction extends Model
         return !$this->active;
     }
 
+    public function fulfill(int $amount): bool
+    {
+        if ($this->user_id) {
+           return $this->user->fulfill($amount);
+        }
+
+        if ($this->amount >= $amount) {
+            $this->amount -= $amount;
+            return $this->save();
+        }
+
+        return false;
     }
 }
