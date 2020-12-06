@@ -20,7 +20,9 @@ class Transaction extends Model
 
     public function getCreditTokenAttribute()
     {
-        return $this->uuid . '-' .  base64_encode($this->id);
+        // ToDo: use passcodes to encrypt UUID
+        // For now, the unencrypted UUID acts as the token
+        return $this->uuid;
     }
 
     public static function createCreditToken(string $uuid = null, int $amount = null): string
