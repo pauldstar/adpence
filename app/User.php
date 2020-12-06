@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function activeTransaction()
+    {
+        return $this->transactions()->whereNull('amount')->first();
+    }
+
     public function getCreditTokenAttribute()
     {
         return optional($this->activeTransaction())->uuid
