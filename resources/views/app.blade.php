@@ -29,6 +29,9 @@
 <body class="secular-one">
 @yield('content')
 
+<x-toast></x-toast>
+
+<script src="{{ asset('js/toast.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 
 @livewireScripts
