@@ -1,9 +1,9 @@
-<div class="ml-auto">
+<div class="ms-auto">
     <div
         wire:click="getCreditToken"
         id="d-balance"
-        data-toggle="modal"
-        data-target="#modal--withdraw"
+        data-bs-toggle="modal"
+        data-bs-target="#modal--withdraw"
         role="button"
         class="text-white"
     >

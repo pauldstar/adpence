@@ -4,8 +4,8 @@
             <p
                 title="Save Ad Credits"
                 role="button"
-                data-toggle="modal"
-                data-target="#modal--login"
+                data-bs-toggle="modal"
+                data-bs-target="#modal--login"
             >Login</p>
         @else
             <a
@@ -29,7 +29,7 @@
     <x-modal id="modal--login">
         <x-slot name="title">Login</x-slot>
 
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-evenly">
             <a href="{{ route('login', ['driver' => 'facebook']) }}">
                 <ion-icon name="logo-facebook" class="mr-4 text-primary font-size-64"></ion-icon>
             </a>
