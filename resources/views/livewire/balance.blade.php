@@ -58,7 +58,7 @@
             $tokenInput = document.getElementById('withdraw-token--input'),
             $copyToken = document.getElementById('withdraw-token--copy');
 
-        Livewire.on('increment-balance', _ => wobble($balanceWrapper));
+        Livewire.on('payment-received', _ => wobble($balanceWrapper));
 
         $copyToken.addEventListener('click', _ => {
             $tokenInput.select();
