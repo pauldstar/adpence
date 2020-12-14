@@ -31,20 +31,18 @@
 
         <div class="d-flex justify-content-evenly">
             <a href="{{ route('login', ['driver' => 'facebook']) }}">
-                <ion-icon name="logo-facebook" class="mr-4 text-primary font-size-64"></ion-icon>
+                <x-icon :name="'facebook'" :class="'text-primary'" :width="64" :height="64"></x-icon>
             </a>
 
             <a href="{{ route('login', ['driver' => 'google']) }}">
-                <ion-icon name="logo-google" class="text-danger font-size-64"></ion-icon>
+                <x-icon :name="'google'" :class="'text-danger'" :width="64" :height="64"></x-icon>
             </a>
         </div>
     </x-modal>
 @endif
 
-@push('body-scripts')
-    @if(auth()->guest())
-        <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
-    @else
+@unless(auth()->guest())
+    @push('body-scripts')
         <script>
             let $username = document.getElementById('p-username');
 
@@ -56,8 +54,8 @@
                 this.href = '#';
             });
         </script>
-    @endif
-@endpush
+    @endpush
+@endunless
 
 @push('styles')
     <style>
