@@ -14,7 +14,7 @@ class Balance extends Component
     public string $creditToken;
     public ?string $sessionUuid = null;
 
-    protected $listeners = ['payment-received' => 'incrementBalance'];
+    protected array $listeners = ['increment-balance' => 'incrementBalance'];
 
     public function mount()
     {
@@ -26,11 +26,11 @@ class Balance extends Component
         $this->setBalance();
     }
 
-    public function incrementBalance(int $value): void
+    public function incrementBalance(int $amount): void
     {
-        if ($value <= 0) return;
+        if ($amount <= 0) return;
 
-        $this->balance += $value;
+        $this->balance += $amount;
 
         if (Auth::guest()) {
             $this->setSessionUuid();
@@ -40,7 +40,7 @@ class Balance extends Component
             ]);
         } else Auth::user()->update(['balance' => $this->balance]);
 
-        $this->emit('increment-balance');
+        $this->emit('payment-received', $amount);
     }
 
     public function getCreditToken(): void
