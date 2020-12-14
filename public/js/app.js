@@ -4,19 +4,17 @@ initPopover();
 * FUNCTIONS
 */
 
-function wobble(el)
-{
+function wobble(el) {
     el.classList.add('wobble');
     setTimeout(_ => el.classList.remove('wobble'), 800);
 }
 
-function initPopover()
-{
+function initPopover() {
     let popoverTriggerList = [].slice.call(
         document.querySelectorAll('[data-toggle="popover"]')
     );
 
-    let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
-    })
+    });
 }
