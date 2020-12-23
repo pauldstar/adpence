@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', PlayController::class);
 
-Route::get('login/{driver}', [LoginController::class, 'redirectToProvider'])->name('login');
-Route::get('login/{driver}/callback', [LoginController::class, 'handleProviderCallback']);
+Route::prefix('login')->group(function () {
+    Route::get('/{driver}', [LoginController::class, 'redirectToProvider'])->name('login');
+    Route::get('/{driver}/callback', [LoginController::class, 'handleProviderCallback']);
+});
+
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
